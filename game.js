@@ -5,6 +5,7 @@ var world = [
 		{y : 
 			{open : true,
 			entity : {
+				immortal : true,// this is here for telling if you can attack something
 				HP : 10,
 				Str : 0,
 				Int : 0,
