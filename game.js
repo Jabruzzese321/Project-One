@@ -1,11 +1,11 @@
 var firstSecond = 2;
 //grid object
 var world = [
-	{x : 
-		{y : 
+	{x :
+		{y :
 			{open : true,//for move refrance
 			entity : {
-				name: "Bones",
+				name: "Air",
 				art : 0,//art will be set into array and the number will allow us to call which we need. 0 is art for air
 				mortal : false,// this is here for telling if you can attack something
 				HP : 0,
@@ -25,6 +25,13 @@ var world = [
 	}
 ]
 //0 is air, 1 is player, 2 is wall, 3 is bad guy
+
+playerPlaceX = 1;
+playerPlaceY = 1;
+playerHp = 10;
+p = true;
+
+
 
 function move(x,y,d){//x and y are relation to grid,,,, d is the arrow key direction.
 	var altX = x;
@@ -47,6 +54,10 @@ function move(x,y,d){//x and y are relation to grid,,,, d is the arrow key direc
 	//now we use altX/Y to check if spot is open
 
 	if (world[0].x[altX].y[altY].open){
+		if(x==playerPlaceX && y==playerPlaceY){//is this the player?
+			playerPlaceX = altX;
+			playerPlaceY = altY;
+		}
 		(world[0].x[altX].y[altY]) = (world[0].x[x].y[y]);//player is cloned to new space
 		(world[0].x[x].y[y].open) = true;
 		(world[0].x[x].y[y].entity.art) = 0;
@@ -56,11 +67,11 @@ function move(x,y,d){//x and y are relation to grid,,,, d is the arrow key direc
 	else{//play bump sound to let user know something's wrong
 		var audioElement = document.createElement("bump");
 		audioElement.setAttribute("src", "assets/bump.mp3");
-		
+
 	}
 }
 
-function attackAim(x,y,r) { //we need to check all spots in range of players weapon
+function attackAim(x,y,r,p) { //we need to check all spots in range of players weapon and if its the player attacking
 	//math to solve diagonal distance is to find the longer of x or y then to sub by 2 till you get to 1 or 0 counting how many times you do so the longer of x or y is then added to the number of times you had o subtract.
 	for(var i = 0; i < 8; i++){
 		var line = true;
@@ -112,27 +123,32 @@ function attackAim(x,y,r) { //we need to check all spots in range of players wea
 				y++;
 			break;
 		}
-		attackAimLook(line,code,r,x,y);
+		attackAimLook(line,code,r,x,y,p);
 	}
 }
 
-function attackAimLook(line,code,r,x,y){
+function attackAimLook(line,code,r,x,y,p){
 	var read1 = code[0];
 	var read2 = code[1];
 	var step2 = line;
 
-	if(r>0){//ends search if out of range
-		return;
-	}
+	if(r>0){return;}//ends search if out of range
 
-	if(world[0].x[x].y[y].entity.mortal){//throw info to player attack list
-		var xy = x+","+y; 
-		var name = world[0].x[x].y[y].entity.name
-		var b = $("<button>");
-		b.position=xy;
-		b.name=name;
-		$("#attackList").append(b);
-		return;
+	if(p){//if player
+		if(world[0].x[x].y[y].entity.mortal){//and something we can hit
+			var xy = x+","+y;
+			var name = world[0].x[x].y[y].entity.name
+			var b = $("<button>");
+			b.position=xy;
+			b.name=name;
+			$("#attackList").append(b);//throw info to player attack list
+			return;
+		}
+	}
+	else{
+		if(x==playerPlaceX && y==playerPlaceY){//is this the player?
+			attackAction(x,y,1,1);//an npc is attacking
+		}
 	}
 
 	if(firstSecond%2==0){//if first and every other diagonal
@@ -236,5 +252,89 @@ function attackAimLook(line,code,r,x,y){
 			break;
 		}
 	}
+}
 
+function attackAction(x,y,atk,str){//enemy position//the base damage//the added dmg from stats
+	var damage = atk+str;
+	var hp = (world[0].x[x].y[y].entity.HP);
+	hp =- damage;
+	if (hp<=0){
+		if(x==playerPlaceX && y==playerPlaceY){//is this the player?
+			gameOver();
+		}
+		world[0].x[x].y[y].entity.HP = 0;
+		world[0].x[x].y[y].open = true;
+		world[0].x[x].y[y].entity.mortal = false;
+		world[0].x[x].y[y].entity.art = 0;
+		//death/gameover function if players hp is 0
+
+	}
+	else
+		world[0].x[x].y[y].entity.HP = hp;
+		if(x==playerPlaceX && y==playerPlaceY){
+			playerHp = hp;
+		}
+	nextTurn();
+	p = true;
+}
+
+function badGuyMove(x,y){
+	var direction = 0;
+	var startX = x;
+	var startY = y;
+	p = false;
+	attackAim(x,y,1,p);
+	if (!p){
+		x = playerPlaceX - x;
+		y = playerPlaceY - y
+		if(x<=0){//is player left me?
+			if(y<=0){//is player below me?
+				x = Math.abs(x);
+				y = Math.abs(y);
+
+				if(x<=y){//is player more down?
+					direction = 3;
+				}
+				else{//or left
+					direction = 4;
+				}
+			}
+			else{//player is above
+				x = Math.abs(x);
+				y = Math.abs(y);
+				if(x<=y){//is player more up
+					direction = 1;
+				}
+				else{//more left
+					direction = 4;
+				}
+			}
+		}
+		else{//player is right
+			if(y<=0){//is player below me?
+				x = Math.abs(x);
+				y = Math.abs(y);
+
+				if(x<=y){//is player more down?
+					direction = 3;
+				}
+				else{//or right
+					direction = 2;
+				}
+			}
+			else{//player is above
+				x = Math.abs(x);
+				y = Math.abs(y);
+				if(x<=y){//is player more up
+					direction = 1;
+				}
+				else{//more right
+					direction = 2;
+				}
+			}
+		}
+
+		move(startX,startY,direction);
+		p = true;
+	}
 }
