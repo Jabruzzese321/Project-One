@@ -1,7 +1,6 @@
-var firstSecond = 2;
-//grid object
-var world = [
-	{x :
+
+var world = [//grid object
+	[{x :[
 		{y :
 			{open : true,//for move refrance
 			entity : {
@@ -21,17 +20,39 @@ var world = [
 				]
 			}
 			}
-		}
-	}
+		}]
+	}]
 ]
 //0 is air, 1 is player, 2 is wall, 3 is bad guy
 
-playerPlaceX = 1;
-playerPlaceY = 1;
-playerHp = 10;
-p = true;
+var turns = [//this wil be where enemies start out on grid
+	{x:playerPlaceX, y:playerPlaceY},
+	{x:5, y:6},
+	{x:9, y:9},
+	{x:6, y:6}
+]
+var firstSecond = 2;//used to count every other space for diagonals
+var playerPlaceX = 1;//used to tell if target is player for bad guys
+var playerPlaceY = 1;//used to tell if target is player for bad guys
+var playerHp = 10;//used to tell if its game over
+var p = true;//used to tell if its the players action
+var turn = 0;//keeps track of turn order
 
-
+function nextTurn(){
+	if (turn==0){
+		turn++;
+		//wait for player action
+	}
+	else{
+		var x = turns[turn].x;
+		var y = turns[turn].y;
+		turn++;
+		badGuyMove(x,y);
+	}
+	if(turn>3){
+		turn=0;
+	}
+}
 
 function move(x,y,d){//x and y are relation to grid,,,, d is the arrow key direction.
 	var altX = x;
@@ -58,20 +79,26 @@ function move(x,y,d){//x and y are relation to grid,,,, d is the arrow key direc
 			playerPlaceX = altX;
 			playerPlaceY = altY;
 		}
+		else{
+			turns[turn].x = altX;
+			turns[turn].y = altY;
+		}
 		(world[0].x[altX].y[altY]) = (world[0].x[x].y[y]);//player is cloned to new space
 		(world[0].x[x].y[y].open) = true;
 		(world[0].x[x].y[y].entity.art) = 0;
 		(world[0].x[x].y[y].entity.mortal) = false;
+		p = true;
 		nextTurn();
 	}
 	else{//play bump sound to let user know something's wrong
-		var audioElement = document.createElement("bump");
-		audioElement.setAttribute("src", "assets/bump.mp3");
-
+		if(x==playerPlaceX && y==playerPlaceY){//is this the player?
+			var audioElement = document.createElement("bump");
+			audioElement.setAttribute("src", "assets/bump.mp3");
+		}
 	}
 }
 
-function attackAim(x,y,r,p) { //we need to check all spots in range of players weapon and if its the player attacking
+function attackAim(x,y,r,p){//we need to check all spots in range of players weapon and if its the player attacking
 	//math to solve diagonal distance is to find the longer of x or y then to sub by 2 till you get to 1 or 0 counting how many times you do so the longer of x or y is then added to the number of times you had o subtract.
 	for(var i = 0; i < 8; i++){
 		var line = true;
@@ -127,7 +154,7 @@ function attackAim(x,y,r,p) { //we need to check all spots in range of players w
 	}
 }
 
-function attackAimLook(line,code,r,x,y,p){
+function attackAimLook(line,code,r,x,y,p){//is handed first step for branch from attackAim
 	var read1 = code[0];
 	var read2 = code[1];
 	var step2 = line;
@@ -147,7 +174,7 @@ function attackAimLook(line,code,r,x,y,p){
 	}
 	else{
 		if(x==playerPlaceX && y==playerPlaceY){//is this the player?
-			attackAction(x,y,1,1);//an npc is attacking
+			attackAction(x,y,1,0);//an npc is attacking
 		}
 	}
 
@@ -266,19 +293,20 @@ function attackAction(x,y,atk,str){//enemy position//the base damage//the added 
 		world[0].x[x].y[y].open = true;
 		world[0].x[x].y[y].entity.mortal = false;
 		world[0].x[x].y[y].entity.art = 0;
-		//death/gameover function if players hp is 0
-
 	}
-	else
+	else{
 		world[0].x[x].y[y].entity.HP = hp;
 		if(x==playerPlaceX && y==playerPlaceY){
 			playerHp = hp;
+			p = true;//this is here if the enemy attacked
 		}
+		
+	}
+	
 	nextTurn();
-	p = true;
 }
 
-function badGuyMove(x,y){
+function badGuyMove(x,y){//only needs the location of the bad guy to move
 	var direction = 0;
 	var startX = x;
 	var startY = y;
@@ -335,6 +363,25 @@ function badGuyMove(x,y){
 		}
 
 		move(startX,startY,direction);
-		p = true;
+		move(startX,startY,1);
+		move(startX,startY,2);
+		move(startX,startY,3);
+		move(startX,startY,4);
 	}
+}
+
+function gameOver(){//show and hide windows as made by the UI guy
+
+}
+
+function win(){//when requirements are met open win
+
+}
+
+function startGame(){//resets the stage and places player back to start in turns[] and world[]
+
+}
+
+function mainMenu(){//start display music and buttons.
+
 }
