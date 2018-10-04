@@ -1,11 +1,71 @@
-html {
-  font-family: sans-serif; 
-  -ms-text-size-adjust: 100%; 
-  -webkit-text-size-adjust: 100%; 
+.container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  flex-direction: column;
 }
 
 
-/
+.col-sm {
+  display: flex; /* or inline-flex */
+  border: 2px solid black;
+  height: 25%;
+  justify-content: space-evenly;
+  flex: 5;
+}
 
-body {
-  margin: 0;
+.box {
+  display: flex;
+  border-right: 2px solid black;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+
+.btn {
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 20px;
+  padding: 6px 30px;
+  color: white;
+  border: none;
+  outline: none;
+  background-color: white;
+}
+
+.button-section {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  padding-top: 15px;
+  flex: 1;
+}
+
+/* On mouse-over */
+.btn:hover {background: #eee;}
+
+.success {color: green;}
+.info {color: dodgerblue;}
+.warning {color: orange;}
+.danger {color: red;}
+.default {color: black;}
+
+.control-panel {
+  display: flex; /* or inline-flex */
+  border: 2px solid black;
+  height: 25%;
+  justify-content: center;
+  flex: 5;
+}
+
+.game-score {
+  display: flex;
+  flex: 2;
+  background-color: aqua;
+}
+
+.game-score > .content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
