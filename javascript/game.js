@@ -1,4 +1,3 @@
-
 var world = [//grid object
 	{x :
 		{y :
@@ -13,6 +12,14 @@ var world = [//grid object
 	}
 ]
 //0 is air, 1 is player, 2 is wall, 3 is bad guy
+
+//ajax jquery
+
+$.ajax({    type: 'POST',    url: 'https://api.codetunnel.net/random-nick',    dataType: 'json',    data: JSON.stringify({theme: "game", sizeLimit: 11}) }).done(function(r){    alert(r.nickname); });
+
+
+
+
 
 var firstSecond = 2;//used to count every other space for diagonals
 var playerPlaceX = 1;//used to tell if target is player for bad guys
