@@ -44,7 +44,7 @@
 /* On mouse-over */
 .btn:hover {background: #eee;}
 
-.success {color: green;}
+.attack {color: green;}
 .info {color: dodgerblue;}
 .warning {color: orange;}
 .danger {color: red;}
