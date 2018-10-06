@@ -1,42 +1,32 @@
 
 var world = [//grid object
-	[{x :[
+	{x :
 		{y :
 			{open : true,//for move refrance
 			entity : {
 				name: "Air",
 				art : 0,//art will be set into array and the number will allow us to call which we need. 0 is art for air
 				mortal : false,// this is here for telling if you can attack something
-				HP : 0,
-				Str : 0,
-				Int : 0,
-				Wep : "Fist",
-				Inv : [
-					{name : "Fist",
-					Atk : 1,
-					Rng : 1,
-					Equipt : true
-					}
-				]
+				}
 			}
-			}
-		}]
-	}]
+		}
+	}
 ]
 //0 is air, 1 is player, 2 is wall, 3 is bad guy
 
-var turns = [//this wil be where enemies start out on grid
-	{x:playerPlaceX, y:playerPlaceY},
-	{x:5, y:6},
-	{x:9, y:9},
-	{x:6, y:6}
-]
 var firstSecond = 2;//used to count every other space for diagonals
 var playerPlaceX = 1;//used to tell if target is player for bad guys
 var playerPlaceY = 1;//used to tell if target is player for bad guys
 var playerHp = 10;//used to tell if its game over
 var p = true;//used to tell if its the players action
 var turn = 0;//keeps track of turn order
+
+var turns = [//this wil be where enemies start out on grid
+	{x:playerPlaceX, y:playerPlaceY, hp:10, range:1},
+	{x:5, y:6, hp:4},
+	{x:9, y:9, hp:2},
+	{x:6, y:6, hp:3}
+]
 
 function nextTurn(){
 	if (turn==0){
@@ -79,14 +69,15 @@ function move(x,y,d){//x and y are relation to grid,,,, d is the arrow key direc
 			playerPlaceX = altX;
 			playerPlaceY = altY;
 		}
-		else{
-			turns[turn].x = altX;
-			turns[turn].y = altY;
-		}
+
+		turns[turn].x = altX;
+		turns[turn].y = altY;
+		
 		(world[0].x[altX].y[altY]) = (world[0].x[x].y[y]);//player is cloned to new space
 		(world[0].x[x].y[y].open) = true;
 		(world[0].x[x].y[y].entity.art) = 0;
 		(world[0].x[x].y[y].entity.mortal) = false;
+		(world[0].x[x].y[y].entity.name) = 
 		p = true;
 		nextTurn();
 	}
@@ -283,27 +274,28 @@ function attackAimLook(line,code,r,x,y,p){//is handed first step for branch from
 
 function attackAction(x,y,atk,str){//enemy position//the base damage//the added dmg from stats
 	var damage = atk+str;
-	var hp = (world[0].x[x].y[y].entity.HP);
+	var hp = (turns[turn].hp);
 	hp =- damage;
+	
 	if (hp<=0){
 		if(x==playerPlaceX && y==playerPlaceY){//is this the player?
 			gameOver();
 		}
-		world[0].x[x].y[y].entity.HP = 0;
+		turns[turn].hp = 0;
 		world[0].x[x].y[y].open = true;
 		world[0].x[x].y[y].entity.mortal = false;
 		world[0].x[x].y[y].entity.art = 0;
+		nextTurn();
 	}
 	else{
-		world[0].x[x].y[y].entity.HP = hp;
+		turns[turn].hp = hp;
 		if(x==playerPlaceX && y==playerPlaceY){
 			playerHp = hp;
+			turns[turn].hp
 			p = true;//this is here if the enemy attacked
+			nextTurn();
 		}
-		
 	}
-	
-	nextTurn();
 }
 
 function badGuyMove(x,y){//only needs the location of the bad guy to move
@@ -369,6 +361,14 @@ function badGuyMove(x,y){//only needs the location of the bad guy to move
 		move(startX,startY,4);
 	}
 }
+
+//
+
+// Move Buttons
+$(".up-button").on("click", move(turns[0].x,turns[0].y,1));
+$(".right-button").on("click", move(turns[0].x,turns[0].y,2));
+$(".down-button").on("click", move(turns[0].x,turns[0].y,3));
+$(".left-button").on("click", move(turns[0].x,turns[0].y,4));
 
 function gameOver(){//show and hide windows as made by the UI guy
 
