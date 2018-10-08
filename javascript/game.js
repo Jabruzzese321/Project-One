@@ -1,4 +1,3 @@
-
 var world = [//grid object
 	[{a:[
 		{art:2,name:"Wall"},
@@ -472,5 +471,5 @@ function startGame(){//resets the stage and places player back to start in turns
 }
 
 function mainMenu(){//start display music and buttons.
-
+  
 }
