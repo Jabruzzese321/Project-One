@@ -1,38 +1,110 @@
 var world = [//grid object
-	{x :
-		{y :
-			{open : true,//for move refrance
-			entity : {
-				name: "Air",
-				art : 0,//art will be set into array and the number will allow us to call which we need. 0 is art for air
-				mortal : false,// this is here for telling if you can attack something
-				}
-			}
-		}
-	}
+	[{a:[
+		{art:2,name:"Wall"},
+		{art:2,name:"Wall"},
+		{art:2,name:"Wall"},
+		{art:2,name:"Wall"},
+		{art:2,name:"Wall"},
+		{art:2,name:"Wall"},
+		{art:2,name:"Wall"},
+		{art:2,name:"Wall"}
+	]}],
+	[{a:[
+		{art:2,name:"Wall"},
+		{art:0,name:"Orc"},
+		{art:0,name:"Orc"},
+		{art:0,name:"Orc"},
+		{art:3,name:"Orc Fighter"},
+		{art:2,name:"Wall"},
+		{art:0,name:"Orc"},
+		{art:2,name:"Wall"}
+	]}],
+	[{a:[
+		{art:2,name:"Wall"},
+		{art:0,name:"Orc"},
+		{art:0,name:"Orc"},
+		{art:0,name:"Orc"},
+		{art:0,name:"Orc"},
+		{art:2,name:"Wall"},
+		{art:0,name:"Orc"},
+		{art:2,name:"Wall"}
+	]}],
+	[{a:[
+		{art:2,name:"Wall"},
+		{art:0,name:"Orc"},
+		{art:0,name:"Orc"},
+		{art:2,name:"Wall"},
+		{art:2,name:"Wall"},
+		{art:2,name:"Wall"},
+		{art:0,name:"Orc"},
+		{art:2,name:"Wall"}
+	]}],
+	[{a:[
+		{art:2,name:"Wall"},
+		{art:2,name:"Wall"},
+		{art:3,name:"Orc Fighter"},
+		{art:0,name:"Orc"},
+		{art:0,name:"Orc"},
+		{art:0,name:"Orc"},
+		{art:1,name:"Player"},
+		{art:2,name:"Wall"}
+	]}],
+	[{a:[
+		{art:2,name:"Wall"},
+		{art:2,name:"Wall"},
+		{art:0,name:"Orc"},
+		{art:0,name:"Orc"},
+		{art:0,name:"Orc"},
+		{art:0,name:"Orc"},
+		{art:0,name:"Orc"},
+		{art:2,name:"Wall"}
+	]}],
+	[{a:[
+		{art:2,name:"Wall"},
+		{art:2,name:"Wall"},
+		{art:2,name:"Wall"},
+		{art:2,name:"Wall"},
+		{art:0,name:"Orc"},
+		{art:0,name:"Orc"},
+		{art:0,name:"Orc"},
+		{art:2,name:"Wall"}
+	]}],
+	[{a:[
+		{art:2,name:"Wall"},
+		{art:3,name:"Orc Fighter"},
+		{art:0,name:"Orc"},
+		{art:0,name:"Orc"},
+		{art:0,name:"Orc"},
+		{art:0,name:"Orc"},
+		{art:0,name:"Orc"},
+		{art:2,name:"Wall"}
+	]}],
+	[{a:[
+		{art:2,name:"Wall"},
+		{art:2,name:"Wall"},
+		{art:2,name:"Wall"},
+		{art:2,name:"Wall"},
+		{art:2,name:"Wall"},
+		{art:2,name:"Wall"},
+		{art:2,name:"Wall"},
+		{art:2,name:"Wall"}
+	]}],
 ]
 //0 is air, 1 is player, 2 is wall, 3 is bad guy
-
-//ajax jquery
-
-$.ajax({    type: 'POST',    url: 'https://api.codetunnel.net/random-nick',    dataType: 'json',    data: JSON.stringify({theme: "game", sizeLimit: 11}) }).done(function(r){    alert(r.nickname); });
-
-
-
-
+//world is two dimentions larger just to keep things in play area
 
 var firstSecond = 2;//used to count every other space for diagonals
-var playerPlaceX = 1;//used to tell if target is player for bad guys
-var playerPlaceY = 1;//used to tell if target is player for bad guys
+var playerPlaceX = 4;//used to tell if target is player for bad guys
+var playerPlaceY = 7;//used to tell if target is player for bad guys
 var playerHp = 10;//used to tell if its game over
 var p = true;//used to tell if its the players action
 var turn = 0;//keeps track of turn order
 
 var turns = [//this wil be where enemies start out on grid
 	{x:playerPlaceX, y:playerPlaceY, hp:10, range:1},
-	{x:5, y:6, hp:4},
-	{x:9, y:9, hp:2},
-	{x:6, y:6, hp:3}
+	{x:1, y:4, hp:4},
+	{x:4, y:2, hp:2},
+	{x:7, y:1, hp:3}
 ]
 
 function nextTurn(){
@@ -52,17 +124,18 @@ function nextTurn(){
 }
 
 function move(x,y,d){//x and y are relation to grid,,,, d is the arrow key direction.
+	p = true;
 	var altX = x;
 	var altY = y;
 	switch(d) {
 		case 1:
-			altY++;
+			altY--;
 			 break;
 		case 2:
 			altX++;
 			 break;
 		case 3:
-			altY--;
+			altY++;
 			 break;
 		case 4:
 			altX--;
@@ -71,21 +144,24 @@ function move(x,y,d){//x and y are relation to grid,,,, d is the arrow key direc
 
 	//now we use altX/Y to check if spot is open
 
-	if (world[0].x[altX].y[altY].open){
+	if (world[altX].a[altY].art==0){
 		if(x==playerPlaceX && y==playerPlaceY){//is this the player?
 			playerPlaceX = altX;
 			playerPlaceY = altY;
+			world[altX].a[altY].art = 1;//player is cloned to new space
 		}
+		else{
+			world[altX].a[altY].art = 3;//enemy moved
+		}
+		world[x].a[y].art = 0;//first position is now empty
 
-		turns[turn].x = altX;
+		turns[turn].x = altX;//update turns position
 		turns[turn].y = altY;
 		
-		(world[0].x[altX].y[altY]) = (world[0].x[x].y[y]);//player is cloned to new space
-		(world[0].x[x].y[y].open) = true;
-		(world[0].x[x].y[y].entity.art) = 0;
-		(world[0].x[x].y[y].entity.mortal) = false;
-		(world[0].x[x].y[y].entity.name) = 
-		p = true;
+		
+
+		render();//Render Refresh
+
 		nextTurn();
 	}
 	else{//play bump sound to let user know something's wrong
@@ -106,13 +182,13 @@ function attackAim(x,y,r,p){//we need to check all spots in range of players wea
 			case 0://up
 				line = true;
 				code = "ux"
-				y++;
+				y--;
 			break;
 			case 1://up right
 				line = false;
 				code = "ur"
 				x++;
-				y++;
+				y--;
 			break;
 			case 2://right
 				line = true;
@@ -123,18 +199,18 @@ function attackAim(x,y,r,p){//we need to check all spots in range of players wea
 				line = false;
 				code = "dr"
 				x++;
-				y--;
+				y++;
 			break;
 			case 4://down
 				line = true;
 				code = "dx"
-				y--;
+				y++;
 			break;
 			case 5://down left
 				line = false;
 				code = "dl"
 				x--;
-				y--;
+				y++;
 			break;
 			case 6://left
 				line = true;
@@ -145,7 +221,7 @@ function attackAim(x,y,r,p){//we need to check all spots in range of players wea
 				line = false;
 				code = "ul"
 				x--;
-				y++;
+				y--;
 			break;
 		}
 		attackAimLook(line,code,r,x,y,p);
@@ -160,9 +236,9 @@ function attackAimLook(line,code,r,x,y,p){//is handed first step for branch from
 	if(r>0){return;}//ends search if out of range
 
 	if(p){//if player
-		if(world[0].x[x].y[y].entity.mortal){//and something we can hit
+		if(world[altX].a[altY].art==3){//and something we can hit
 			var xy = x+","+y;
-			var name = world[0].x[x].y[y].entity.name
+			var name = world[altX].a[altY].name
 			var b = $("<button>");
 			b.position=xy;
 			b.name=name;
@@ -183,13 +259,13 @@ function attackAimLook(line,code,r,x,y,p){//is handed first step for branch from
 			line = true;
 			switch(read1) {
 			case u://up
-				y++;
+				y--;
 			break;
 			case r://right
 				x++;
 			break;
 			case d://down
-				y--;
+				y++;
 			break;
 			case l://left
 				x--;
@@ -199,13 +275,13 @@ function attackAimLook(line,code,r,x,y,p){//is handed first step for branch from
 
 			switch(read2) {
 				case u://up
-				y++;
+				y--;
 				break;
 				case r://right
 				x++;
 				break;
 				case d://down
-				y--;
+				y++;
 				break;
 				case l://left
 				x--;
@@ -223,13 +299,13 @@ function attackAimLook(line,code,r,x,y,p){//is handed first step for branch from
 		line = true;
 		switch(read1) {
 			case u://up
-				y++;
+				y--;
 			break;
 			case r://right
 				x++;
 			break;
 			case d://down
-				y--;
+				y++;
 			break;
 			case l://left
 				x--;
@@ -239,13 +315,13 @@ function attackAimLook(line,code,r,x,y,p){//is handed first step for branch from
 
 			switch(read2) {
 				case u://up
-				y++;
+				y--;
 				break;
 				case r://right
 				x++;
 				break;
 				case d://down
-				y--;
+				y++;
 				break;
 				case l://left
 				x--;
@@ -260,7 +336,7 @@ function attackAimLook(line,code,r,x,y,p){//is handed first step for branch from
 		r--;
 		switch(read1) {
 			case u://up
-				y++;
+				y--;
 				attackAimLook(line,code,r,x,y);
 			break;
 			case r://right
@@ -268,7 +344,7 @@ function attackAimLook(line,code,r,x,y,p){//is handed first step for branch from
 				attackAimLook(line,code,r,x,y);
 			break;
 			case d://down
-				y--;
+				y++;
 				attackAimLook(line,code,r,x,y);
 			break;
 			case l://left
@@ -279,26 +355,21 @@ function attackAimLook(line,code,r,x,y,p){//is handed first step for branch from
 	}
 }
 
-function attackAction(x,y,atk,str){//enemy position//the base damage//the added dmg from stats
-	var damage = atk+str;
+function attackAction(x,y,str){//enemy position//the base damage//the added dmg from stats
 	var hp = (turns[turn].hp);
-	hp =- damage;
+	hp =- str;
 	
 	if (hp<=0){
 		if(x==playerPlaceX && y==playerPlaceY){//is this the player?
 			gameOver();
 		}
 		turns[turn].hp = 0;
-		world[0].x[x].y[y].open = true;
-		world[0].x[x].y[y].entity.mortal = false;
-		world[0].x[x].y[y].entity.art = 0;
+		world[x].a[y].art==0;
 		nextTurn();
 	}
 	else{
 		turns[turn].hp = hp;
 		if(x==playerPlaceX && y==playerPlaceY){
-			playerHp = hp;
-			turns[turn].hp
 			p = true;//this is here if the enemy attacked
 			nextTurn();
 		}
@@ -315,10 +386,9 @@ function badGuyMove(x,y){//only needs the location of the bad guy to move
 		x = playerPlaceX - x;
 		y = playerPlaceY - y
 		if(x<=0){//is player left me?
-			if(y<=0){//is player below me?
+			if(y>=0){//is player below me?
 				x = Math.abs(x);
 				y = Math.abs(y);
-
 				if(x<=y){//is player more down?
 					direction = 3;
 				}
@@ -338,7 +408,7 @@ function badGuyMove(x,y){//only needs the location of the bad guy to move
 			}
 		}
 		else{//player is right
-			if(y<=0){//is player below me?
+			if(y>=0){//is player below me?
 				x = Math.abs(x);
 				y = Math.abs(y);
 
@@ -360,13 +430,24 @@ function badGuyMove(x,y){//only needs the location of the bad guy to move
 				}
 			}
 		}
-
 		move(startX,startY,direction);
-		move(startX,startY,1);
-		move(startX,startY,2);
-		move(startX,startY,3);
-		move(startX,startY,4);
+		if(!p){//if enemy has not moved random direction
+			move(startX,startY,1);
+			if(!p){
+				move(startX,startY,2);
+				if(!p){
+					move(startX,startY,3);
+					if(!p){
+						move(startX,startY,4);
+					}
+				}
+			}
+		}
 	}
+}
+
+function render(){
+
 }
 
 //
@@ -390,5 +471,5 @@ function startGame(){//resets the stage and places player back to start in turns
 }
 
 function mainMenu(){//start display music and buttons.
-
+  
 }
