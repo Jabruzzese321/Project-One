@@ -30,6 +30,14 @@ body{
   flex: 1;
 }
 
+.col-sm, box {
+  padding: 0;
+}
+
+.end {
+  border-right: none;
+}
+
 .btn {
   border-radius: 5px;
   cursor: pointer;
