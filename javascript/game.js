@@ -1,4 +1,3 @@
-
 var world = [//grid object
 	[{a:[
 		{art:2,name:"Wall"},
