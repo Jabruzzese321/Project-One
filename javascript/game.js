@@ -93,6 +93,16 @@ var world = [//grid object
 //0 is air, 1 is player, 2 is wall, 3 is bad guy
 //world is two dimentions larger just to keep things in play area
 
+var pictureHolder = [
+	{picture: "assets/images/0.png"},
+	{picture: "assets/images/1.png"},
+	{picture: "assets/images/2.png"},
+	{picture: "assets/images/3.png"}
+]
+
+//ajax jquery
+$.ajax({    type: 'POST',    url: 'https://api.codetunnel.net/random-nick',    dataType: 'json',    data: JSON.stringify({theme: "game", sizeLimit: 11}) }).done(function(r){    alert(r.nickname); });
+
 var firstSecond = 2;//used to count every other space for diagonals
 var playerPlaceX = 4;//used to tell if target is player for bad guys
 var playerPlaceY = 7;//used to tell if target is player for bad guys
@@ -101,13 +111,14 @@ var p = true;//used to tell if its the players action
 var turn = 0;//keeps track of turn order
 
 var turns = [//this wil be where enemies start out on grid
-	{x:playerPlaceX, y:playerPlaceY, hp:10, range:1},
+	{x:playerPlaceX, y:playerPlaceY, hp:10, range:1, str:2},
 	{x:1, y:4, hp:4},
 	{x:4, y:2, hp:2},
 	{x:7, y:1, hp:3}
 ]
 
 function nextTurn(){
+	render();//Render Refresh
 	if (turn==0){
 		turn++;
 		//wait for player action
@@ -158,10 +169,6 @@ function move(x,y,d){//x and y are relation to grid,,,, d is the arrow key direc
 		turns[turn].x = altX;//update turns position
 		turns[turn].y = altY;
 		
-		
-
-		render();//Render Refresh
-
 		nextTurn();
 	}
 	else{//play bump sound to let user know something's wrong
@@ -237,12 +244,15 @@ function attackAimLook(line,code,r,x,y,p){//is handed first step for branch from
 
 	if(p){//if player
 		if(world[altX].a[altY].art==3){//and something we can hit
-			var xy = x+","+y;
+
 			var name = world[altX].a[altY].name
 			var b = $("<button>");
-			b.position=xy;
-			b.name=name;
-			$("#attackList").append(b);//throw info to player attack list
+			b.attr("data-posX",x);
+			b.attr("data-posY",y);
+			b.attr("data-name",name);
+			b.addClass("btn");
+			b.addClass("hit");
+			$(".button-section").append(b);//throw info to player attack list
 			return;
 		}
 	}
@@ -356,6 +366,9 @@ function attackAimLook(line,code,r,x,y,p){//is handed first step for branch from
 }
 
 function attackAction(x,y,str){//enemy position//the base damage//the added dmg from stats
+	$(".button-section").empty();
+	$(".button-section").append('<button class="btn attack">Attack</button>')
+
 	var hp = (turns[turn].hp);
 	hp =- str;
 	
@@ -447,7 +460,13 @@ function badGuyMove(x,y){//only needs the location of the bad guy to move
 }
 
 function render(){
-
+	for(var i = 1; i < 8; i++){
+		for(var j = 1; i < 7; j++){
+			var link = i.toString()+j;
+			var art = world[i].a[j].art;
+			$('."link"').innerHTML = '<img src="'+pictureHolder[art]+'" />';
+		}
+	}
 }
 
 //
@@ -458,18 +477,30 @@ $(".right-button").on("click", move(turns[0].x,turns[0].y,2));
 $(".down-button").on("click", move(turns[0].x,turns[0].y,3));
 $(".left-button").on("click", move(turns[0].x,turns[0].y,4));
 
-function gameOver(){//show and hide windows as made by the UI guy
+$(".attack").on("click", attackAim(playerPlaceX,playerPlaceY,$(turns[0].range).val(),p) );
 
+$(".hit").on("click", attackAction($(this).attr("data-posX"),$(this).attr("data-posY"),turns[0].str));
+
+$(".endGame").on("click", end());
+
+function end(){//show and hide windows as made by the UI guy
+	var dead;
+	for(var i = 1; i < 3; i++){
+		dead =+ turns[i].hp;
+	}
+	if(dead==0){//PLAYER WIN
+
+	}
+	else{//player Loss
+		
+	};
 }
 
-function win(){//when requirements are met open win
-
-}
 
 function startGame(){//resets the stage and places player back to start in turns[] and world[]
+	turns=[{x:playerPlaceX, y:playerPlaceY, hp:10, range:1, str:2},{x:1, y:4, hp:4},{x:4, y:2, hp:2},{x:7, y:1, hp:3}]
 
-}
-
-function mainMenu(){//start display music and buttons.
-  
+	firstSecond = 2;playerPlaceX = 4;playerPlaceY = 7;playerHp = 10;p = true;turn = 0;
+	
+	world = [[{a:[{art:2,name:"Wall"},{art:2,name:"Wall"},{art:2,name:"Wall"},{art:2,name:"Wall"},{art:2,name:"Wall"},{art:2,name:"Wall"},{art:2,name:"Wall"},{art:2,name:"Wall"}]}],[{a:[{art:2,name:"Wall"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:3,name:"Orc Fighter"},{art:2,name:"Wall"},{art:0,name:"Orc"},{art:2,name:"Wall"}]}],[{a:[{art:2,name:"Wall"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:2,name:"Wall"},{art:0,name:"Orc"},{art:2,name:"Wall"}]}],[{a:[{art:2,name:"Wall"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:2,name:"Wall"},{art:2,name:"Wall"},{art:2,name:"Wall"},{art:0,name:"Orc"},{art:2,name:"Wall"}]}],[{a:[{art:2,name:"Wall"},{art:2,name:"Wall"},{art:3,name:"Orc Fighter"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:1,name:"Player"},{art:2,name:"Wall"}]}],[{a:[{art:2,name:"Wall"},{art:2,name:"Wall"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:2,name:"Wall"}]}],[{a:[{art:2,name:"Wall"},{art:2,name:"Wall"},{art:2,name:"Wall"},{art:2,name:"Wall"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:2,name:"Wall"}]}],[{a:[{art:2,name:"Wall"},{art:3,name:"Orc Fighter"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:2,name:"Wall"}]}],[{a:[{art:2,name:"Wall"},{art:2,name:"Wall"},{art:2,name:"Wall"},{art:2,name:"Wall"},{art:2,name:"Wall"},{art:2,name:"Wall"},{art:2,name:"Wall"},{art:2,name:"Wall"}]}],]
 }
