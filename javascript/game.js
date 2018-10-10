@@ -1,5 +1,5 @@
 var world = [//grid object
-	[{a:[
+	{a:[
 		{art:2,name:"Wall"},
 		{art:2,name:"Wall"},
 		{art:2,name:"Wall"},
@@ -8,8 +8,8 @@ var world = [//grid object
 		{art:2,name:"Wall"},
 		{art:2,name:"Wall"},
 		{art:2,name:"Wall"}
-	]}],
-	[{a:[
+	]},
+	{a:[
 		{art:2,name:"Wall"},
 		{art:0,name:"Orc"},
 		{art:0,name:"Orc"},
@@ -18,8 +18,8 @@ var world = [//grid object
 		{art:2,name:"Wall"},
 		{art:0,name:"Orc"},
 		{art:2,name:"Wall"}
-	]}],
-	[{a:[
+	]},
+	{a:[
 		{art:2,name:"Wall"},
 		{art:0,name:"Orc"},
 		{art:0,name:"Orc"},
@@ -28,8 +28,8 @@ var world = [//grid object
 		{art:2,name:"Wall"},
 		{art:0,name:"Orc"},
 		{art:2,name:"Wall"}
-	]}],
-	[{a:[
+	]},
+	{a:[
 		{art:2,name:"Wall"},
 		{art:0,name:"Orc"},
 		{art:0,name:"Orc"},
@@ -38,8 +38,8 @@ var world = [//grid object
 		{art:2,name:"Wall"},
 		{art:0,name:"Orc"},
 		{art:2,name:"Wall"}
-	]}],
-	[{a:[
+	]},
+	{a:[
 		{art:2,name:"Wall"},
 		{art:2,name:"Wall"},
 		{art:3,name:"Orc Fighter"},
@@ -48,8 +48,8 @@ var world = [//grid object
 		{art:0,name:"Orc"},
 		{art:1,name:"Player"},
 		{art:2,name:"Wall"}
-	]}],
-	[{a:[
+	]},
+	{a:[
 		{art:2,name:"Wall"},
 		{art:2,name:"Wall"},
 		{art:0,name:"Orc"},
@@ -58,8 +58,8 @@ var world = [//grid object
 		{art:0,name:"Orc"},
 		{art:0,name:"Orc"},
 		{art:2,name:"Wall"}
-	]}],
-	[{a:[
+	]},
+	{a:[
 		{art:2,name:"Wall"},
 		{art:2,name:"Wall"},
 		{art:2,name:"Wall"},
@@ -68,8 +68,8 @@ var world = [//grid object
 		{art:0,name:"Orc"},
 		{art:0,name:"Orc"},
 		{art:2,name:"Wall"}
-	]}],
-	[{a:[
+	]},
+	{a:[
 		{art:2,name:"Wall"},
 		{art:3,name:"Orc Fighter"},
 		{art:0,name:"Orc"},
@@ -78,8 +78,8 @@ var world = [//grid object
 		{art:0,name:"Orc"},
 		{art:0,name:"Orc"},
 		{art:2,name:"Wall"}
-	]}],
-	[{a:[
+	]},
+	{a:[
 		{art:2,name:"Wall"},
 		{art:2,name:"Wall"},
 		{art:2,name:"Wall"},
@@ -88,7 +88,7 @@ var world = [//grid object
 		{art:2,name:"Wall"},
 		{art:2,name:"Wall"},
 		{art:2,name:"Wall"}
-	]}],
+	]},
 ]
 //0 is air, 1 is player, 2 is wall, 3 is bad guy
 //world is two dimentions larger just to keep things in play area
@@ -460,8 +460,8 @@ function badGuyMove(x,y){//only needs the location of the bad guy to move
 }
 
 function render(){
-	for(var i = 1; i < 8; i++){
-		for(var j = 1; i < 7; j++){
+	for(var i = 1; i < 7; i++){
+		for(var j = 1; i < 8; j++){
 			var link = i.toString()+j;
 			var art = world[i].a[j].art;
 			$('."link"').innerHTML = '<img src="'+pictureHolder[art]+'" />';
