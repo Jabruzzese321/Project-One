@@ -462,6 +462,7 @@ function render(){
 		for(var j = 1; j < 8; j++){
 			var link = i.toString()+j;
 			var art = world[i].a[j].art;
+			$('.'+link).empty();
 			$('.'+link).prepend('<img src="'+pictureHolder[art].picture+'" />');
 		}
 	}
