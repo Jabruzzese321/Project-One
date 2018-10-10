@@ -11,7 +11,7 @@ body{
   height: 100vh;
   width: 100vw;
   flex-direction: column;
-}
+  }
 
 
 .col-sm {
@@ -43,11 +43,13 @@ body{
   border-radius: 5px;
   cursor: pointer;
   font-size: 20px;
+  font-weight: bolder;
   padding: 6px 30px;
   color: white;
   border: none;
   outline: none;
   background-color: white;
+  box-shadow: 6px 6px 6px #333333;
 }
 
 .button-section {
@@ -59,7 +61,49 @@ body{
 }
 
 /* On mouse-over */
-.btn:hover {background: #eee;}
+.btn:hover {background: #eee;
+  animation: 2s;
+  animation-name: pulse; 
+}
+
+@-webkit-keyframes pulse {
+  from {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+
+  50% {
+    -webkit-transform: scale3d(1.05, 1.05, 1.05);
+    transform: scale3d(1.05, 1.05, 1.05);
+  }
+
+  to {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+@keyframes pulse {
+  from {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+
+  50% {
+    -webkit-transform: scale3d(1.05, 1.05, 1.05);
+    transform: scale3d(1.05, 1.05, 1.05);
+  }
+
+  to {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+.pulse {
+  -webkit-animation-name: pulse;
+  animation-name: pulse;
+}
 
 .attack {color: green;}
 .endGame {color: black;}
@@ -79,7 +123,9 @@ body{
 
 .score {
   color: #eee;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   font-weight: 500;
+   
 }
 
 .game-score > .content {
