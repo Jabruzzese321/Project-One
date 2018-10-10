@@ -6,6 +6,7 @@ body{
 	background-size: cover;
 }
 
+
 .container {
   display: flex;
   height: 100vh;
@@ -29,8 +30,12 @@ body{
   justify-content: center;
   align-items: center;
   flex: 1;
-  }
-
+}
+.box>img{
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
 .col-sm, box {
   padding: 0;
 }

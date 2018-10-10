@@ -92,10 +92,10 @@ var world = [//grid object
 //world is two dimentions larger just to keep things in play area
 
 var pictureHolder = [
-	{picture: "assets/images/0.png"},
-	{picture: "assets/images/1.png"},
-	{picture: "assets/images/2.png"},
-	{picture: "assets/images/3.png"}
+	{picture: "./images/0.png"},
+	{picture: "./images/1.png"},
+	{picture: "./images/2.png"},
+	{picture: "./images/3.png"}
 ]
 
 //ajax jquery
@@ -170,10 +170,10 @@ function move(x,y,d){//x and y are relation to grid,,,, d is the arrow key direc
 		nextTurn();
 	}
 	else{//play bump sound to let user know something's wrong
-		if(x==playerPlaceX && y==playerPlaceY){//is this the player?
-			var audioElement = document.createElement("bump");
-			audioElement.setAttribute("src", "assets/bump.mp3");
-		}
+		//if(x==playerPlaceX && y==playerPlaceY){//is this the player?
+		//	var audioElement = document.createElement("bump");
+		//	audioElement.setAttribute("src", "assets/bump.mp3");
+		//}
 	}
 }
 
@@ -458,28 +458,50 @@ function badGuyMove(x,y){//only needs the location of the bad guy to move
 }
 
 function render(){
-	console.log(world);
-	debugger;
 	for(var i = 1; i < 7; i++){
 		for(var j = 1; j < 8; j++){
 			var link = i.toString()+j;
 			var art = world[i].a[j].art;
-			$('.'+link).innerHTML = '<img src="'+pictureHolder[art]+'" />';
+			$('.'+link).prepend('<img src="'+pictureHolder[art].picture+'" />');
 		}
 	}
 }
 
+$(document).keyup(function(e) {
+	console.log(e);
+	var ea = e.originalEvent.keyCode
+	console.log(ea);
+	switch (ea) {
+
+	// Move Buttons (Keyboard Down)
+	case "40":
+	move(turns[0].x,turns[0].y,3)
+	  break;
+
+	  // Move Buttons (Keyboard Right)
+	case "39":
+	move(turns[0].x,turns[0].y,2)
+	  break;
+
+	  // Move Buttons (Keyboard Up)
+	case "38":
+	move(turns[0].x,turns[0].y,1);
+	  break;
+
+	  // Move Buttons (Keyboard Left)
+	case "37":
+	move(turns[0].x,turns[0].y,4)
+	  break;
+
+	default:
+	  break;
+	}
+ });
 // Move Buttons
-$(".up-button").on("click", move(turns[0].x,turns[0].y,1));
-$(".right-button").on("click", move(turns[0].x,turns[0].y,2));
-$(".down-button").on("click", move(turns[0].x,turns[0].y,3));
-$(".left-button").on("click", move(turns[0].x,turns[0].y,4));
 
 $(".attack").on("click", attackAim(playerPlaceX,playerPlaceY,turns[0].range,p) );
 
-$(".hit").on("click", function(){
-	attackAction($(this).attr("data-posX"),$(this).attr("data-posY"),turns[0].str)
-});
+$(".hit").on("click", function(){attackAction($(this).attr("data-posX"),$(this).attr("data-posY"),turns[0].str)});
 
 $(".endGame").on("click", end());
 
