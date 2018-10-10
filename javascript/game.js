@@ -496,11 +496,13 @@ function end(){//show and hide windows as made by the UI guy
 	};
 }
 
-
 function startGame(){//resets the stage and places player back to start in turns[] and world[]
 	turns=[{x:playerPlaceX, y:playerPlaceY, hp:10, range:1, str:2},{x:1, y:4, hp:4},{x:4, y:2, hp:2},{x:7, y:1, hp:3}]
 
 	firstSecond = 2;playerPlaceX = 4;playerPlaceY = 7;playerHp = 10;p = true;turn = 0;
 	
 	world = [[{a:[{art:2,name:"Wall"},{art:2,name:"Wall"},{art:2,name:"Wall"},{art:2,name:"Wall"},{art:2,name:"Wall"},{art:2,name:"Wall"},{art:2,name:"Wall"},{art:2,name:"Wall"}]}],[{a:[{art:2,name:"Wall"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:3,name:"Orc Fighter"},{art:2,name:"Wall"},{art:0,name:"Orc"},{art:2,name:"Wall"}]}],[{a:[{art:2,name:"Wall"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:2,name:"Wall"},{art:0,name:"Orc"},{art:2,name:"Wall"}]}],[{a:[{art:2,name:"Wall"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:2,name:"Wall"},{art:2,name:"Wall"},{art:2,name:"Wall"},{art:0,name:"Orc"},{art:2,name:"Wall"}]}],[{a:[{art:2,name:"Wall"},{art:2,name:"Wall"},{art:3,name:"Orc Fighter"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:1,name:"Player"},{art:2,name:"Wall"}]}],[{a:[{art:2,name:"Wall"},{art:2,name:"Wall"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:2,name:"Wall"}]}],[{a:[{art:2,name:"Wall"},{art:2,name:"Wall"},{art:2,name:"Wall"},{art:2,name:"Wall"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:2,name:"Wall"}]}],[{a:[{art:2,name:"Wall"},{art:3,name:"Orc Fighter"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:2,name:"Wall"}]}],[{a:[{art:2,name:"Wall"},{art:2,name:"Wall"},{art:2,name:"Wall"},{art:2,name:"Wall"},{art:2,name:"Wall"},{art:2,name:"Wall"},{art:2,name:"Wall"},{art:2,name:"Wall"}]}],]
+	nextTurn();
 }
+
+startGame();
