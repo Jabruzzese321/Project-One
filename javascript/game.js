@@ -7,6 +7,7 @@ var world = [//grid object
 		{art:"2",name:"Wall"},
 		{art:"2",name:"Wall"},
 		{art:"2",name:"Wall"},
+		{art:"2",name:"Wall"},
 		{art:"2",name:"Wall"}
 	]},
 	{a:[
@@ -17,6 +18,7 @@ var world = [//grid object
 		{art:"3",name:"Orc Fighter"},
 		{art:"2",name:"Wall"},
 		{art:"0",name:"Orc"},
+		{art:"2",name:"Wall"},
 		{art:"2",name:"Wall"}
 	]},
 	{a:[
@@ -27,6 +29,7 @@ var world = [//grid object
 		{art:"0",name:"Orc"},
 		{art:"2",name:"Wall"},
 		{art:"0",name:"Orc"},
+		{art:"2",name:"Wall"},
 		{art:"2",name:"Wall"}
 	]},
 	{a:[
@@ -37,6 +40,7 @@ var world = [//grid object
 		{art:"2",name:"Wall"},
 		{art:"2",name:"Wall"},
 		{art:"0",name:"Orc"},
+		{art:"2",name:"Wall"},
 		{art:"2",name:"Wall"}
 	]},
 	{a:[
@@ -47,6 +51,7 @@ var world = [//grid object
 		{art:"0",name:"Orc"},
 		{art:"0",name:"Orc"},
 		{art:"1",name:"Player"},
+		{art:"2",name:"Wall"},
 		{art:"2",name:"Wall"}
 	]},
 	{a:[
@@ -57,6 +62,7 @@ var world = [//grid object
 		{art:"0",name:"Orc"},
 		{art:"0",name:"Orc"},
 		{art:"0",name:"Orc"},
+		{art:"2",name:"Wall"},
 		{art:"2",name:"Wall"}
 	]},
 	{a:[
@@ -66,20 +72,12 @@ var world = [//grid object
 		{art:"2",name:"Wall"},
 		{art:"0",name:"Orc"},
 		{art:"0",name:"Orc"},
-		{art:"0",name:"Orc"},
-		{art:"2",name:"Wall"}
-	]},
-	{a:[
-		{art:"2",name:"Wall"},
 		{art:"3",name:"Orc Fighter"},
-		{art:"0",name:"Orc"},
-		{art:"0",name:"Orc"},
-		{art:"0",name:"Orc"},
-		{art:"0",name:"Orc"},
-		{art:"0",name:"Orc"},
+		{art:"2",name:"Wall"},
 		{art:"2",name:"Wall"}
 	]},
 	{a:[
+		{art:"2",name:"Wall"},
 		{art:"2",name:"Wall"},
 		{art:"2",name:"Wall"},
 		{art:"2",name:"Wall"},
@@ -114,7 +112,7 @@ var turns = [//this wil be where enemies start out on grid
 	{x:playerPlaceX, y:playerPlaceY, hp:10, range:1, str:2},
 	{x:1, y:4, hp:4},
 	{x:4, y:2, hp:2},
-	{x:7, y:1, hp:3}
+	{x:6, y:6, hp:3}
 ]
 
 function nextTurn(){
@@ -155,7 +153,7 @@ function move(x,y,d){//x and y are relation to grid,,,, d is the arrow key direc
 
 	//now we use altX/Y to check if spot is open
 
-	if (world[altX].a[altY].art==0){
+	if (world[altX].a[altY].art=="0"){
 		if(x==playerPlaceX && y==playerPlaceY){//is this the player?
 			playerPlaceX = altX;
 			playerPlaceY = altY;
@@ -377,7 +375,7 @@ function attackAction(x,y,str){//enemy position//the base damage//the added dmg 
 			gameOver();
 		}
 		turns[turn].hp = 0;
-		world[x].a[y].art==0;
+		world[x].a[y].art = "0";
 		nextTurn();
 	}
 	else{
@@ -460,16 +458,16 @@ function badGuyMove(x,y){//only needs the location of the bad guy to move
 }
 
 function render(){
+	console.log(world);
+	debugger;
 	for(var i = 1; i < 7; i++){
-		for(var j = 1; i < 8; j++){
+		for(var j = 1; j < 8; j++){
 			var link = i.toString()+j;
 			var art = world[i].a[j].art;
-			$('."link"').innerHTML = '<img src="'+pictureHolder[art]+'" />';
+			$('.'+link).innerHTML = '<img src="'+pictureHolder[art]+'" />';
 		}
 	}
 }
-
-//
 
 // Move Buttons
 $(".up-button").on("click", move(turns[0].x,turns[0].y,1));
@@ -477,9 +475,11 @@ $(".right-button").on("click", move(turns[0].x,turns[0].y,2));
 $(".down-button").on("click", move(turns[0].x,turns[0].y,3));
 $(".left-button").on("click", move(turns[0].x,turns[0].y,4));
 
-$(".attack").on("click", attackAim(playerPlaceX,playerPlaceY,$(turns[0].range).val(),p) );
+$(".attack").on("click", attackAim(playerPlaceX,playerPlaceY,turns[0].range,p) );
 
-$(".hit").on("click", attackAction($(this).attr("data-posX"),$(this).attr("data-posY"),turns[0].str));
+$(".hit").on("click", function(){
+	attackAction($(this).attr("data-posX"),$(this).attr("data-posY"),turns[0].str)
+});
 
 $(".endGame").on("click", end());
 
@@ -501,7 +501,97 @@ function startGame(){//resets the stage and places player back to start in turns
 
 	firstSecond = 2;playerPlaceX = 4;playerPlaceY = 7;playerHp = 10;p = true;turn = 0;
 	
-	world = [[{a:[{art:2,name:"Wall"},{art:2,name:"Wall"},{art:2,name:"Wall"},{art:2,name:"Wall"},{art:2,name:"Wall"},{art:2,name:"Wall"},{art:2,name:"Wall"},{art:2,name:"Wall"}]}],[{a:[{art:2,name:"Wall"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:3,name:"Orc Fighter"},{art:2,name:"Wall"},{art:0,name:"Orc"},{art:2,name:"Wall"}]}],[{a:[{art:2,name:"Wall"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:2,name:"Wall"},{art:0,name:"Orc"},{art:2,name:"Wall"}]}],[{a:[{art:2,name:"Wall"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:2,name:"Wall"},{art:2,name:"Wall"},{art:2,name:"Wall"},{art:0,name:"Orc"},{art:2,name:"Wall"}]}],[{a:[{art:2,name:"Wall"},{art:2,name:"Wall"},{art:3,name:"Orc Fighter"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:1,name:"Player"},{art:2,name:"Wall"}]}],[{a:[{art:2,name:"Wall"},{art:2,name:"Wall"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:2,name:"Wall"}]}],[{a:[{art:2,name:"Wall"},{art:2,name:"Wall"},{art:2,name:"Wall"},{art:2,name:"Wall"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:2,name:"Wall"}]}],[{a:[{art:2,name:"Wall"},{art:3,name:"Orc Fighter"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:0,name:"Orc"},{art:2,name:"Wall"}]}],[{a:[{art:2,name:"Wall"},{art:2,name:"Wall"},{art:2,name:"Wall"},{art:2,name:"Wall"},{art:2,name:"Wall"},{art:2,name:"Wall"},{art:2,name:"Wall"},{art:2,name:"Wall"}]}],]
+	world = [
+		{a:[
+			{art:"2",name:"Wall"},
+			{art:"2",name:"Wall"},
+			{art:"2",name:"Wall"},
+			{art:"2",name:"Wall"},
+			{art:"2",name:"Wall"},
+			{art:"2",name:"Wall"},
+			{art:"2",name:"Wall"},
+			{art:"2",name:"Wall"},
+			{art:"2",name:"Wall"}
+		]},
+		{a:[
+			{art:"2",name:"Wall"},
+			{art:"0",name:"Orc"},
+			{art:"0",name:"Orc"},
+			{art:"0",name:"Orc"},
+			{art:"3",name:"Orc Fighter"},
+			{art:"2",name:"Wall"},
+			{art:"0",name:"Orc"},
+			{art:"2",name:"Wall"},
+			{art:"2",name:"Wall"}
+		]},
+		{a:[
+			{art:"2",name:"Wall"},
+			{art:"0",name:"Orc"},
+			{art:"0",name:"Orc"},
+			{art:"0",name:"Orc"},
+			{art:"0",name:"Orc"},
+			{art:"2",name:"Wall"},
+			{art:"0",name:"Orc"},
+			{art:"2",name:"Wall"},
+			{art:"2",name:"Wall"}
+		]},
+		{a:[
+			{art:"2",name:"Wall"},
+			{art:"0",name:"Orc"},
+			{art:"0",name:"Orc"},
+			{art:"2",name:"Wall"},
+			{art:"2",name:"Wall"},
+			{art:"2",name:"Wall"},
+			{art:"0",name:"Orc"},
+			{art:"2",name:"Wall"},
+			{art:"2",name:"Wall"}
+		]},
+		{a:[
+			{art:"2",name:"Wall"},
+			{art:"2",name:"Wall"},
+			{art:"3",name:"Orc Fighter"},
+			{art:"0",name:"Orc"},
+			{art:"0",name:"Orc"},
+			{art:"0",name:"Orc"},
+			{art:"1",name:"Player"},
+			{art:"2",name:"Wall"},
+			{art:"2",name:"Wall"}
+		]},
+		{a:[
+			{art:"2",name:"Wall"},
+			{art:"2",name:"Wall"},
+			{art:"0",name:"Orc"},
+			{art:"0",name:"Orc"},
+			{art:"0",name:"Orc"},
+			{art:"0",name:"Orc"},
+			{art:"0",name:"Orc"},
+			{art:"2",name:"Wall"},
+			{art:"2",name:"Wall"}
+		]},
+		{a:[
+			{art:"2",name:"Wall"},
+			{art:"2",name:"Wall"},
+			{art:"2",name:"Wall"},
+			{art:"2",name:"Wall"},
+			{art:"0",name:"Orc"},
+			{art:"0",name:"Orc"},
+			{art:"3",name:"Orc Fighter"},
+			{art:"2",name:"Wall"},
+			{art:"2",name:"Wall"}
+		]},
+		{a:[
+			{art:"2",name:"Wall"},
+			{art:"2",name:"Wall"},
+			{art:"2",name:"Wall"},
+			{art:"2",name:"Wall"},
+			{art:"2",name:"Wall"},
+			{art:"2",name:"Wall"},
+			{art:"2",name:"Wall"},
+			{art:"2",name:"Wall"},
+			{art:"2",name:"Wall"}
+		]},
+	]
+
 	nextTurn();
 }
 
