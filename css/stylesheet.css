@@ -29,8 +29,7 @@ body{
   justify-content: center;
   align-items: center;
   flex: 1;
-  background: url("../images/0.png");
-}
+  }
 
 .col-sm, box {
   padding: 0;
