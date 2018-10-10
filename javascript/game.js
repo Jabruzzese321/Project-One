@@ -475,22 +475,22 @@ $(document).keyup(function(e) {
 
 	// Move Buttons (Keyboard Down)
 	case "40":
-	move(turns[0].x,turns[0].y,3)
+		move(turns[0].x,turns[0].y,3)
 	  break;
 
 	  // Move Buttons (Keyboard Right)
 	case "39":
-	move(turns[0].x,turns[0].y,2)
+		move(turns[0].x,turns[0].y,2)
 	  break;
 
 	  // Move Buttons (Keyboard Up)
 	case "38":
-	move(turns[0].x,turns[0].y,1);
+		move(turns[0].x,turns[0].y,1);
 	  break;
 
 	  // Move Buttons (Keyboard Left)
 	case "37":
-	move(turns[0].x,turns[0].y,4)
+		move(turns[0].x,turns[0].y,4)
 	  break;
 
 	default:
